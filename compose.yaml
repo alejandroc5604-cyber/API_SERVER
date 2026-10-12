@@ -1,0 +1,12 @@
+services:
+  foundtrash-api:
+    build: .
+    container_name: foundtrash-api
+    ports:
+      - "8000:8000"
+    environment:
+      API_KEY: "${API_KEY}"
+      DATABASE_DIR: /app/data/FoundTrashDatabases
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
