@@ -275,7 +275,7 @@ async def DB_FindDB():
             decoded_bytes = base64.urlsafe_b64decode(safe_bytes)
             database_name = decoded_bytes.decode("utf-8")
             databases.append({
-                "Database_filename": database_filename, 
+                "Database_filename": str(Path(database_filename).stem), 
                 "Database_Name": database_name
             }) # when using anything, use the filename
 
