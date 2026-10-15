@@ -62,7 +62,7 @@ async def CheckAPIKeyDatabase(api):
 
 
 
-@app.post("/DB_AddItem/{database_name}")
+@app.post("/api/DB_AddItem/{database_name}")
 async def DB_AddItem(
     database_name: str,
     api_key: str,
@@ -110,7 +110,7 @@ async def DB_AddItem(
         if connection is not None:
             connection.close()
 
-@app.delete("/DB_DeleteItem/{database_name}")
+@app.delete("/api/DB_DeleteItem/{database_name}")
 async def DB_DeleteItem(database_name:str, item_uuid:str, api_key:str):
     result = await CheckAPIKeyDatabase(api_key)
     if not result:
@@ -135,7 +135,7 @@ async def DB_DeleteItem(database_name:str, item_uuid:str, api_key:str):
         if connection is not None:
             connection.close()
 
-@app.put("/DB_EditItem/{database_name}")
+@app.put("/api/DB_EditItem/{database_name}")
 async def DB_EditItem(
     database_name:str, 
     api_key:str,
@@ -183,7 +183,7 @@ async def DB_EditItem(
         if connection is not None:
             connection.close()
 
-@app.post("/DB_AddDatabase")
+@app.post("/api/DB_AddDatabase")
 async def DB_AddDatabase(
     api_key:str,
     database_name:str):
@@ -219,7 +219,7 @@ async def DB_AddDatabase(
             connection.close()  
 
 
-@app.get("/DB_GetDatabase/{database_name}")
+@app.get("/api/DB_GetDatabase/{database_name}")
 async def DB_GetDatabase(database_name:str, limit:int | None):
     """Fetch the data for the said database_name"""
     connection = None
@@ -264,7 +264,7 @@ async def DB_GetDatabase(database_name:str, limit:int | None):
             connection.close()
 
 
-@app.get("/DB_FindDB")
+@app.get("/api/DB_FindDB")
 async def DB_FindDB():
     """Find the databases in the DB_BasePath"""
     databases = []
@@ -282,7 +282,7 @@ async def DB_FindDB():
     
     return {"status": "successful", "Databases": databases}
 
-@app.delete("/DB_DeleteDB/{database_name}")
+@app.delete("/api/DB_DeleteDB/{database_name}")
 async def DB_DeleteDB(database_name:str, api_key:str):
     result = await CheckAPIKeyDatabase(api_key)
     if not result:
@@ -295,6 +295,19 @@ async def DB_DeleteDB(database_name:str, api_key:str):
         return {"status": "successful", "DatabaseUUID": database_name}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"Something has gone wrong: {e}")
+# Now we are going to add an image database, with the reqests and storage in base64, 
+# We will also give a UUID to all of the images, which will replace the image path
+#
+
+@app.post("/ImageDB/AddImage")
+async def IMGDB_AddImage(key:str, image:str):
+    """Add Image, formatted in base64 URLSafe. Return an error if the image base
+    64 does not meet the criteria"""
+    result = await CheckAPIKeyDatabase(key)
+    if not result:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Invalid or missing API key")
+    
+    
 
 
 
