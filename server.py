@@ -18,7 +18,7 @@ DB_BasePath = Path(
 
 
 DB_BasePath.mkdir(parents=True, exist_ok=True)
-app = FastAPI()
+app = FastAPI(docs_url="/api/docs")
 
 setup_CORS = False
 if os.getenv("SetupCORS", "FALSE") == "TRUE":
